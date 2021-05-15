@@ -17,11 +17,10 @@
 <script lang='ts'>
     import Vue from 'vue';
     import {Component} from 'vue-property-decorator';
-    import tagListModel from '@/models/tagListmodel';
     import Icon from '@/components/Icon.vue';
     import FromInput from '@/components/moneys/FromInput.vue';
     import Buttons from '@/components/Buttons.vue';
-
+    import olStore from '@/store/index2'
     @Component({
         components: {Buttons, FromInput, Icon}
     })
@@ -29,8 +28,8 @@
         tag?:Tag = undefined
         created() {
             const id = this.$route.params.id;
-            tagListModel.fetchList();
-            const tags = tagListModel.data;
+            olStore.fetchList();
+            const tags = olStore.tagList;
             const tag = tags.filter(t => t.id == id)[0];
             if (tag) {
                 this.tag = tag;
@@ -40,12 +39,12 @@
         }
         onUpdate(name:string){
             if(this.tag){
-                tagListModel.update(this.tag.id,name)
+                olStore.updateTag(this.tag.id,name)
             }
         }
         remove() {
             if(this.tag){
-                if(tagListModel.remove(this.tag.id)){
+                if(olStore.removeTag(this.tag.id)){
                     this.$router.replace('/labels')
                 }else{
                     window.alert('删除失败')

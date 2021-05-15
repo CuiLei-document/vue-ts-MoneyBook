@@ -18,18 +18,18 @@
     import {Component} from 'vue-property-decorator';
     import Icon from '@/components/Icon.vue';
     import Buttons from '@/components/Buttons.vue';
-    import tagListModel from '@/models/tagListmodel';
+    import olStore from '@/store/index2'
 
-    tagListModel.fetchList()
+    olStore.fetchList()
     @Component({
         components: {Buttons, Icon}
     })
     export default class Labels extends Vue {
-        tags = tagListModel.data
+        tags = olStore.tagList
         createTag(){
             const name = window.prompt('输入标签名')
             if(name){
-                const massage = tagListModel.create(name)
+                const massage = olStore.createTag(name)
                 if(massage === 'duplicated'){
                     window.alert('标签名重复了')
                 }else if(massage === 'success'){

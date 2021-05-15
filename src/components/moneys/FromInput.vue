@@ -9,14 +9,14 @@
 
 <script lang='ts'>
     import Vue from 'vue';
-    import {Component, Prop, Watch} from 'vue-property-decorator';
+    import {Component, Prop} from 'vue-property-decorator';
 
     @Component
     export default class FromInput extends Vue {
        @Prop(String) value!:string
         @Prop(String) filerName!:string
         @Prop(String) placeholder!: string
-        @Watch('value')
+
         onValueChange(value:string){
             this.$emit('update:value', value);
         }
