@@ -1,4 +1,9 @@
+
+type RecordList = {
+    data: string[]
+}
 const recordListModel = {
+    data:[],
     clone(record: RecordItem[] | RecordItem){
        return  JSON.parse(JSON.stringify(record));
     },

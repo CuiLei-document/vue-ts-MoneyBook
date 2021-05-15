@@ -1,8 +1,8 @@
 <template>
     <Layout>
         <ul class="tags">
-            <li v-for="tag in tags" :key="tag">
-                <span>{{tag}}</span>
+            <li v-for="tag in tags" :key="tag.id">
+                <span>{{tag.name}}</span>
                 <Icon name="right" class="icon"/>
             </li>
 
@@ -20,14 +20,22 @@
     import Buttons from '@/components/Buttons.vue';
     import tagListModel from '@/models/tagListmodel';
 
+    tagListModel.fetchList()
     @Component({
         components: {Buttons, Icon}
     })
     export default class Labels extends Vue {
-        tags = tagListModel.fetchList()
+        tags = tagListModel.data
         createTag(){
             const name = window.prompt('输入标签名')
-            tagListModel.create(name)
+            if(name){
+                const massage = tagListModel.create(name)
+                if(massage === 'duplicated'){
+                    window.alert('标签名重复了')
+                }else if(massage === 'success'){
+                    window.alert('创建成功')
+                }
+            }
         }
     }
 </script>
