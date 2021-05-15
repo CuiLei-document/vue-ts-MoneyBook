@@ -13,9 +13,9 @@
 
     @Component
     export default class FromInput extends Vue {
-        value = ''
-        @Prop() filerName!:string
-        @Prop() placeholder!: string
+       @Prop(String) value!:string
+        @Prop(String) filerName!:string
+        @Prop(String) placeholder!: string
         @Watch('value')
         onValueChange(value:string){
             this.$emit('update:value', value);
