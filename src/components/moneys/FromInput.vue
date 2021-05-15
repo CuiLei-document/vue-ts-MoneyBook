@@ -2,7 +2,7 @@
     <div>
         <label class="notes">
             <span class="name">备注</span>
-            <input type="text" placeholder="输入备注">
+            <input type="text" placeholder="输入备注" :value="value" @input="value = $event.target.value">
         </label>
     </div>
 </template>
@@ -13,7 +13,7 @@
 
     @Component
     export default class FromInput extends Vue {
-
+        value = ''
     }
 </script>
 
