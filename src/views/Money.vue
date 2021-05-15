@@ -15,7 +15,8 @@
     import FromInput from '@/components/moneys/FromInput.vue';
     import Types from '@/components/moneys/Types.vue';
     import NumberPad from '@/components/moneys/NumberPad.vue';
-    import modules from '@/modules';
+    import recordListModel from '@/models/recordListModel';
+    import tagListModel from '@/models/tagListmodel';
 
     @Component({
         components: {NumberPad, Types, FromInput, Tags}
@@ -24,8 +25,8 @@
         record:RecordItem = {
             tags: [],notes:'',type:'-',amount:0
         }
-        recordList = modules.fetchRecord()
-        tags=['衣','食','住','行']
+        recordList = recordListModel.fetchRecord()
+        tags= tagListModel.fetchList()
         onUpdateTags(value:string[]){
             this.record.tags = value
         }
@@ -38,14 +39,14 @@
             console.log(value);
         }
         onUpdateRecord(){
-            const record2:RecordItem  = modules.clone(this.record);
+            const record2:RecordItem  = recordListModel.clone(this.record);
             record2.createAl = new Date().toISOString()
             this.recordList.push(record2)
             console.log(this.recordList);
         }
         @Watch('recordList')
         onRecordListChange(){
-            window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
+            recordListModel.saveRecord(this.recordList)
         }
     }
 </script>

@@ -7,7 +7,7 @@
             >{{tag}}</li>
         </ul>
         <div class="newTag">
-            <button @click="createTag">新建标签</button>
+            <Buttons @click="createTag">新建标签</Buttons>
         </div>
     </div>
 </template>
@@ -15,8 +15,10 @@
 <script lang='ts'>
     import Vue from 'vue';
     import {Component, Prop} from 'vue-property-decorator';
-
-    @Component
+    import Buttons from '@/components/Buttons.vue';
+    @Component({
+        components: {Buttons}
+    })
     export default class Tags extends Vue {
         @Prop() dataSource!:string
         selectedTags:string[] = []

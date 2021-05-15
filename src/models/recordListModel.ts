@@ -1,4 +1,4 @@
-const modules = {
+const recordListModel = {
     clone(record: RecordItem[] | RecordItem){
        return  JSON.parse(JSON.stringify(record));
     },
@@ -10,4 +10,4 @@ const modules = {
     }
 }
 
-export default modules
+export default recordListModel
