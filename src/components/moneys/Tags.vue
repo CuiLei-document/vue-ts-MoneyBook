@@ -5,6 +5,7 @@
             :class="{selected:selectedTags.indexOf(tag)>=0}"
              @click="toggle(tag)"
             >{{tag.name}}</li>
+
         </ul>
         <div class="newTag">
             <Buttons @click="createTag">新建标签</Buttons>
@@ -16,6 +17,7 @@
     import Vue from 'vue';
     import {Component, Prop} from 'vue-property-decorator';
     import Buttons from '@/components/Buttons.vue';
+    import tagListModel from '@/models/tagListmodel';
     @Component({
         components: {Buttons}
     })
@@ -33,10 +35,11 @@
         }
         createTag(){
             const name = window.prompt('请输入标签名')
-            if(name === ''){
+            if(!name){
                 return window.alert('名字不能为空')
             }else{
-                this.$emit('update:data-source',[...this.dataSource,name])
+                window.alert('创建成功')
+                tagListModel.create(name)
             }
 
         }
@@ -69,13 +72,7 @@
 
         > .newTag {
             padding-top: 16px;
-            > button {
-                font-size: 18px;
-                background: transparent;
-                border: none;
-                border-bottom: 1px solid #d8d8d8;
-                padding: 2px 8px;
-            }
+
         }
     }
 </style>

@@ -8,7 +8,7 @@
 
         </div>
         <div class="createTag-wrapper">
-            <Buttons @click="createTag">新建标签</Buttons>
+            <Buttons class="createTag" @click="createTag">新建标签</Buttons>
         </div>
     </Layout>
 </template>

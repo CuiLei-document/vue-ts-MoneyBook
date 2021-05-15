@@ -2,7 +2,10 @@
     <Layout class-prefix="layout-wrapper">
         <NumberPad @update:value="onUpdateNumber" @submit="onUpdateRecord"/>
         <Types  :value.sync="record.type" />
-        <FromInput @update:value="onUpdateFrom"/>
+        <div class="from-wrapper">
+            <FromInput filer-name="备注" placeholder="请输入备注" @update:value="onUpdateFrom"/>
+
+        </div>
         <Tags :data-source.sync="tags" @update:value="onUpdateTags"/>
     </Layout>
 
@@ -55,5 +58,9 @@
     .layout-wrapper-items{
         display:flex;
         flex-direction: column-reverse;
+    }
+    .from-wrapper{
+        padding: 10px;
+        background: white;
     }
 </style>

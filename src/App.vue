@@ -14,6 +14,7 @@
    font-size: 16px;
    line-height:1.5;
    color: #2c3e50;
+   background: #f4f1f1;
  }
 
 </style>

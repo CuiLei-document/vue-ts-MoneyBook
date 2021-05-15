@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <button class="createTag" @click="$emit('click',$event)">新建标签</button>
-    </div>
+        <button class="button" @click="$emit('click',$event)">
+            <slot/>
+        </button>
 </template>
 
 <script lang='ts'>
@@ -15,12 +15,12 @@
 </script>
 
 <style scoped lang="scss">
-    .createTag {
-        background: #767676;
+    .button{
+        background: #8f8d8d;
         border: none;
         color: white;
         border-radius: 4px;
-        padding: 6px;
+        padding: 12px 16px;
         font-size: 16px;
     }
 </style>
