@@ -6,10 +6,10 @@
             <span></span>
         </div>
         <div class="from">
-            <FromInput filer-name="备注" placeholder="请输入标签"/>
+            <FromInput @update:value="onUpdate" :value="tag.name" filer-name="备注" placeholder="请输入标签"/>
         </div>
         <div class="buttons">
-            <Buttons @click="removeTag">删除标签</Buttons>
+            <Buttons @click="remove">删除标签</Buttons>
         </div>
     </layout>
 </template>
@@ -26,19 +26,31 @@
         components: {Buttons, FromInput, Icon}
     })
     export default class EditLabel extends Vue {
+        tag?:Tag = undefined
         created() {
             const id = this.$route.params.id;
             tagListModel.fetchList();
             const tags = tagListModel.data;
             const tag = tags.filter(t => t.id == id)[0];
             if (tag) {
-                console.log(tag);
+                this.tag = tag;
             } else {
                 this.$router.replace('/404');
             }
         }
-
-        removeTag() {
+        onUpdate(name:string){
+            if(this.tag){
+                tagListModel.update(this.tag.id,name)
+            }
+        }
+        remove() {
+            if(this.tag){
+                if(tagListModel.remove(this.tag.id)){
+                    this.$router.replace('/labels')
+                }else{
+                    window.alert('删除失败')
+                }
+            }
         }
     }
 </script>
