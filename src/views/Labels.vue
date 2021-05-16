@@ -18,11 +18,13 @@
     import {Component} from 'vue-property-decorator';
     import Icon from '@/components/Icon.vue';
     import Buttons from '@/components/Buttons.vue';
+    import {mixins} from 'vue-class-component';
+    import CreateTags from '@/mixins/CreateTags';
 
     @Component({
         components: {Buttons, Icon}
     })
-    export default class Labels extends Vue {
+    export default class Labels extends mixins(CreateTags) {
         get tags(){
             return  this.$store.state.tagList;
         }
@@ -30,12 +32,7 @@
             this.$store.commit('fetchTag');
 
         }
-        createTag() {
-            const name = window.prompt('输入标签名');
-            if (name) {
-                this.$store.commit('createTag',name);
-            }
-        }
+
     }
 </script>
 

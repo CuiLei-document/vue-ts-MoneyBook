@@ -9,6 +9,7 @@ type RootStore = {
     recordList: RecordItem[],
     currentError: Error | null
     tagList: Tag[],
+    createTagError: Error | null
     currentTag: Tag | undefined
 }
 type Tag = {

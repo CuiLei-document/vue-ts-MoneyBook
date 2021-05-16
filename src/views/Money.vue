@@ -34,10 +34,6 @@
             this.record.tags = value;
         }
 
-        onUpdateFrom(value: string) {
-            this.record.notes = value;
-        }
-
         onUpdateNumber(value: string) {
             this.record.amount = parseFloat(value);
         }
