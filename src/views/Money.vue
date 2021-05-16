@@ -1,6 +1,5 @@
 <template>
     <Layout class-prefix="layout-wrapper">
-        {{record}}
         <NumberPad @update:value="onUpdateNumber" @submit="onUpdateRecord"/>
         <Types :value="record.type" @update:value="record.type = $event"/>
         <div class="from-wrapper">
@@ -18,8 +17,6 @@
     import FromInput from '@/components/moneys/FromInput.vue';
     import Types from '@/components/moneys/Types.vue';
     import NumberPad from '@/components/moneys/NumberPad.vue';
-    import olStore from '@/store/index2';
-
     @Component({
         components: {NumberPad, Types, FromInput, Tags}
     })
@@ -27,7 +24,7 @@
         record: RecordItem = {
             tags: [], notes: '', type: '-', amount: 0
         };
-        recordList = olStore.fetchRecord();
+        recordList = this.$store.commit('fetchRecord')
 
         onUpdateTags(value: string[]) {
             this.record.tags = value;
@@ -42,7 +39,7 @@
         }
 
         onUpdateRecord() {
-            olStore.createRecord(this.record);
+            this.$store.commit('createRecord',this.record);
         }
 
     }

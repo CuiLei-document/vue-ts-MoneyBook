@@ -16,7 +16,6 @@
        @Prop(String) value!:string
         @Prop(String) filerName!:string
         @Prop(String) placeholder!: string
-
         onValueChange(value:string){
             this.$emit('update:value', value);
         }

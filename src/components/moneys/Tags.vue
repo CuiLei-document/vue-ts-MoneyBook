@@ -16,11 +16,15 @@
 <script lang='ts'>
     import Vue from 'vue';
     import {Component} from 'vue-property-decorator';
-    import olStore from '@/store/index2'
 
     @Component
     export default class Tags extends Vue {
-        dataSource = olStore.tagList
+        get dataSource(){
+            return this.$store.state.tagList
+        }
+        created(){
+            this.$store.commit('fetchTag')
+        }
         selectedTags:string[] = []
         toggle(tag:string){
             const index = this.selectedTags.indexOf(tag);
@@ -36,7 +40,7 @@
             if(!name){
                 return window.alert('名字不能为空')
             }else{
-                olStore.createTag(name)
+               this.$store.commit('createTag',name)
             }
 
         }

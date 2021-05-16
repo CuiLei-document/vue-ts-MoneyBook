@@ -22,39 +22,34 @@
     import Icon from '@/components/Icon.vue';
     import FromInput from '@/components/moneys/FromInput.vue';
     import Buttons from '@/components/Buttons.vue';
-    import olStore from '@/store/index2';
 
     @Component({
         components: {Buttons, FromInput, Icon}
     })
     export default class EditLabel extends Vue {
-        tag?: Tag = undefined;
+        get tag() {
+            return this.$store.state.currentTag;
+        }
 
         created() {
-            const id = this.$route.params.id;
-            olStore.fetchList();
-            const tags = olStore.tagList;
-            const tag = tags.filter(t => t.id == id)[0];
-            if (tag) {
-                this.tag = tag;
-            } else {
+            this.$store.commit('fetchTag');
+            let id = this.$route.params.id;
+            this.$store.commit('setCurrentTag', id);
+            if (!this.tag) {
                 this.$router.replace('/404');
             }
         }
 
         onUpdate(name: string) {
             if (this.tag) {
-                olStore.updateTag(this.tag.id, name);
+                this.$store.commit('updateTag', {id: this.tag.id, name: name});
             }
         }
 
         remove() {
             if (this.tag) {
-                if (olStore.removeTag(this.tag.id)) {
-                    this.$router.replace('/labels');
-                } else {
-                    window.alert('删除失败');
-                }
+                this.$store.commit('removeTag', this.tag.id);
+                this.$router.replace('/labels');
             }
         }
     }

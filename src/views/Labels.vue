@@ -18,19 +18,22 @@
     import {Component} from 'vue-property-decorator';
     import Icon from '@/components/Icon.vue';
     import Buttons from '@/components/Buttons.vue';
-    import olStore from '@/store/index2';
 
-    olStore.fetchList();
     @Component({
         components: {Buttons, Icon}
     })
     export default class Labels extends Vue {
-        tags = olStore.tagList;
+        get tags(){
+            return  this.$store.state.tagList;
+        }
+        created(){
+            this.$store.commit('fetchTag');
 
+        }
         createTag() {
             const name = window.prompt('输入标签名');
             if (name) {
-                olStore.createTag(name);
+                this.$store.commit('createTag',name);
             }
         }
     }
