@@ -7,6 +7,12 @@ import Layout from '@/components/Layout.vue';
 
 Vue.config.productionTip = false
 Vue.component('Layout',Layout)
+
+window.onload = function(){
+  setTimeout(()=>{
+    window.scrollTo(0,50)
+  },1000)
+}
 new Vue({
   router,
   store,

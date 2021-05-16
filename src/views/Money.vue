@@ -1,9 +1,9 @@
 <template>
     <Layout class-prefix="layout-wrapper">
         <NumberPad @update:value="onUpdateNumber" @submit="onUpdateRecord"/>
-        <Types :value="record.type" @update:value="record.type = $event"/>
+        <Tabs :data-source="recordMixin" :value.sync="record.type"/>
         <div class="from-wrapper">
-            <FromInput filer-name="备注" placeholder="请输入备注" @update:value="onUpdateFrom"/>
+            <FromInput filer-name="备注" placeholder="请输入备注" :value.sync="record.notes"/>
         </div>
         <Tags @update:value="onUpdateTags"/>
     </Layout>
@@ -17,14 +17,18 @@
     import FromInput from '@/components/moneys/FromInput.vue';
     import Types from '@/components/moneys/Types.vue';
     import NumberPad from '@/components/moneys/NumberPad.vue';
+    import Tabs from '@/components/Tabs.vue';
+    import recordMixin from '@/mixins/recordMixin';
+
     @Component({
-        components: {NumberPad, Types, FromInput, Tags}
+        components: {Tabs, NumberPad, Types, FromInput, Tags}
     })
     export default class Money extends Vue {
         record: RecordItem = {
             tags: [], notes: '', type: '-', amount: 0
         };
-        recordList = this.$store.commit('fetchRecord')
+        recordList = this.$store.commit('fetchRecord');
+        recordMixin = recordMixin;
 
         onUpdateTags(value: Tag[]) {
             this.record.tags = value;
@@ -39,10 +43,18 @@
         }
 
         onUpdateRecord() {
-            if(this.record.amount === 0){
-               return  window.alert('不能为0')
+            if (this.record.amount === 0) {
+                return window.alert('金额不能为 0 ');
+            } else if (!this.record.tags || this.record.tags.length === 0) {
+                return window.alert('请选择一个标签');
             }
-            this.$store.commit('createRecord',this.record);
+            this.$store.commit('createRecord', this.record);
+            if (this.$store.state.currentError === null) {
+                window.alert('成功');
+                this.record.notes = '';
+            } else if (this.record.amount > 1000) {
+                return window.alert('消费已经过千');
+            }
         }
 
     }

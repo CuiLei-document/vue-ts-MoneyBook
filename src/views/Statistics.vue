@@ -1,25 +1,29 @@
 <template>
     <Layout>
-        <Tabs :data-source="type" :value.sync="yyy" class-prefix="tabs"/>
-        <div>
-            <ul>
-                <li v-for="(group,index) in recordGroup" :key="index">
-                    <h3 class="title">{{meihua(group.title)}}</h3>
-                    <ul>
-                        <li class="tags" v-for="tags in group.items" :key="tags.id">
+        <Tabs :data-source="types" :value.sync="yyy" class-prefix="tabs"/>
+        <ul v-if="recordGroup.length >0">
+            <li v-for="(group,index) in recordGroup" :key="index">
+                <h3 class="title">
+                    <span>{{meihua(group.title)}}</span>
+                    <span>￥{{group.total}}</span>
+                </h3>
+                <ul>
+                    <li class="tags" v-for="tags in group.items" :key="tags.id">
                             <span>
                                 {{tagString(tags.tags)}}
                             </span>
-                            <span class="notes">
+                        <span class="notes">
                                 {{tags.notes}}
                             </span>
-                            <span>
+                        <span>
                                 ￥{{tags.amount}}
                             </span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div v-else class="noResult">
+            <p>当前页面没有内容</p>
         </div>
     </Layout>
 </template>
@@ -30,16 +34,14 @@
     import Tabs from '@/components/Tabs.vue';
     import dayjs from 'dayjs';
     import clone from '@/lib/clone';
+    import recordMixin from '@/mixins/recordMixin';
 
     @Component({
         components: {Tabs}
     })
     export default class Statistics extends Vue {
         yyy = '-';
-        type = [
-            {text: '支出', value: '-'},
-            {text: '收入', value: '+'}
-        ];
+        types = recordMixin;
 
         tagString(tags: Tag[]) {
             return tags.length === 0 ? '无' : tags.map(t => t.name).join('，');
@@ -70,25 +72,39 @@
 
         get recordGroup() {
             const {recordList} = this;
-            const hashTable: { title: string, items: RecordItem }[] = [];
-            const newList = clone(recordList).sort((a, b) => dayjs(b.createAl).valueOf() - dayjs(a.createAl).valueOf());
-            const group = [{title:dayjs(newList[0].createAl).format('YYYY-MM-DD'),items:[newList[0]]}]
-            for(let i=1; i<newList.length;i++){
-                const current = newList[i]
-                const last = group[group.length-1]
-                if(dayjs(last.title).isSame(dayjs(current.createAl),'day')){
-                    last.items.push(current)
-                }else{
-                    group.push({title:dayjs(current.createAl).format('YYYY-MM-DD'),items:[current]})
+            const newList = clone(recordList).filter(t => t.type === this.yyy).sort((a, b) => dayjs(b.createAl).valueOf() - dayjs(a.createAl).valueOf());
+            if (newList.length === 0) {
+                return [];
+            }
+
+            type Group = { title: string, total?: number, items: RecordItem[] }[]
+            const group: Group = [{title: dayjs(newList[0].createAl).format('YYYY-MM-DD'), items: [newList[0]]}];
+            for (let i = 1; i < newList.length; i++) {
+                const current = newList[i];
+                const last = group[group.length - 1];
+                if (dayjs(last.title).isSame(dayjs(current.createAl), 'day')) {
+                    last.items.push(current);
+                } else {
+                    group.push({title: dayjs(current.createAl).format('YYYY-MM-DD'), items: [current]});
                 }
             }
-            console.log(group);
+            group.map(group => {
+                group.total = group.items.reduce((sum, item) => sum + item.amount
+                    , 0);
+            });
             return group;
         }
     }
 </script>
 
 <style scoped lang="scss">
+    .noResult {
+        text-align: center;
+        padding: 16px;
+        font-size: 22px;
+        color: red;
+    }
+
     ::v-deep .tabs-item {
         background: white;
 

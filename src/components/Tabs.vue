@@ -11,13 +11,15 @@
 <script lang='ts'>
     import Vue from 'vue';
     import {Component, Prop} from 'vue-property-decorator';
-
+    type TagsDataSource ={
+    text:string,value:string[]
+    }
     @Component
     export default class Tabs extends Vue {
-        @Prop(Array) dataSource!: {text:string,value:string}[]
+        @Prop({required: true, type: Array}) dataSource!: TagsDataSource[]
         @Prop(String) value!:string
         @Prop(String) classPrefix?:string
-        select(tags:{text:string,value:string}){
+        select(tags:TagsDataSource){
             this.$emit('update:value',tags.value)
         }
     }

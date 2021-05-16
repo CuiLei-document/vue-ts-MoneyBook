@@ -7,8 +7,9 @@ type RecordItem = {
 }
 type RootStore = {
     recordList: RecordItem[],
+    currentError: Error | null
     tagList: Tag[],
-    currentTag: Tag |undefined
+    currentTag: Tag | undefined
 }
 type Tag = {
     id: string;

@@ -41,6 +41,7 @@
                 return window.alert('名字不能为空')
             }else{
                this.$store.commit('createTag',name)
+                return window.alert('创建成功')
             }
 
         }
