@@ -39,6 +39,9 @@
         }
 
         onUpdateRecord() {
+            if(this.record.amount === 0){
+               return  window.alert('不能为0')
+            }
             this.$store.commit('createRecord',this.record);
         }
 

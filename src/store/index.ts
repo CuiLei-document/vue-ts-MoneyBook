@@ -4,11 +4,7 @@ import clone from '@/lib/clone';
 import createId from '@/lib/createId';
 
 Vue.use(Vuex);
-type RootStore = {
-    recordList: RecordItem[],
-    tagList: Tag[],
-    currentTag: Tag |undefined
-}
+
 const store = new Vuex.Store({
     state: {
         recordList: [] as RecordItem[],
