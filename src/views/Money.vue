@@ -1,11 +1,12 @@
 <template>
     <Layout class-prefix="layout-wrapper">
+        {{record}}
         <NumberPad @update:value="onUpdateNumber" @submit="onUpdateRecord"/>
-        <Types  :value.sync="record.type" />
+        <Types :value="record.type" @update:value="record.type = $event"/>
         <div class="from-wrapper">
             <FromInput filer-name="备注" placeholder="请输入备注" @update:value="onUpdateFrom"/>
         </div>
-        <Tags  @update:value="onUpdateTags"/>
+        <Tags @update:value="onUpdateTags"/>
     </Layout>
 
 </template>
@@ -23,32 +24,37 @@
         components: {NumberPad, Types, FromInput, Tags}
     })
     export default class Money extends Vue {
-        record:RecordItem = {
-            tags: [],notes:'',type:'-',amount:0
+        record: RecordItem = {
+            tags: [], notes: '', type: '-', amount: 0
+        };
+        recordList = olStore.fetchRecord();
+
+        onUpdateTags(value: string[]) {
+            this.record.tags = value;
         }
-        recordList = olStore.fetchRecord()
-        onUpdateTags(value:string[]){
-            this.record.tags = value
+
+        onUpdateFrom(value: string) {
+            this.record.notes = value;
         }
-        onUpdateFrom(value:string){
-            this.record.notes = value
+
+        onUpdateNumber(value: string) {
+            this.record.amount = parseFloat(value);
         }
-        onUpdateNumber(value:string){
-            this.record.amount = parseFloat(value)
-        }
-        onUpdateRecord(){
-           olStore.createRecord(this.record)
+
+        onUpdateRecord() {
+            olStore.createRecord(this.record);
         }
 
     }
 </script>
 
-<style  lang="scss">
-    .layout-wrapper-items{
-        display:flex;
+<style lang="scss">
+    .layout-wrapper-items {
+        display: flex;
         flex-direction: column-reverse;
     }
-    .from-wrapper{
+
+    .from-wrapper {
         padding: 10px;
         background: white;
     }

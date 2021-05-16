@@ -1,7 +1,9 @@
 <template>
     <layout>
         <div class="navBar">
-            <Icon name="left"/>
+            <router-link to="/labels">
+                <Icon name="left"/>
+            </router-link>
             <span class="title">编辑标签</span>
             <span></span>
         </div>
@@ -20,12 +22,14 @@
     import Icon from '@/components/Icon.vue';
     import FromInput from '@/components/moneys/FromInput.vue';
     import Buttons from '@/components/Buttons.vue';
-    import olStore from '@/store/index2'
+    import olStore from '@/store/index2';
+
     @Component({
         components: {Buttons, FromInput, Icon}
     })
     export default class EditLabel extends Vue {
-        tag?:Tag = undefined
+        tag?: Tag = undefined;
+
         created() {
             const id = this.$route.params.id;
             olStore.fetchList();
@@ -37,17 +41,19 @@
                 this.$router.replace('/404');
             }
         }
-        onUpdate(name:string){
-            if(this.tag){
-                olStore.updateTag(this.tag.id,name)
+
+        onUpdate(name: string) {
+            if (this.tag) {
+                olStore.updateTag(this.tag.id, name);
             }
         }
+
         remove() {
-            if(this.tag){
-                if(olStore.removeTag(this.tag.id)){
-                    this.$router.replace('/labels')
-                }else{
-                    window.alert('删除失败')
+            if (this.tag) {
+                if (olStore.removeTag(this.tag.id)) {
+                    this.$router.replace('/labels');
+                } else {
+                    window.alert('删除失败');
                 }
             }
         }

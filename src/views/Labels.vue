@@ -18,23 +18,19 @@
     import {Component} from 'vue-property-decorator';
     import Icon from '@/components/Icon.vue';
     import Buttons from '@/components/Buttons.vue';
-    import olStore from '@/store/index2'
+    import olStore from '@/store/index2';
 
-    olStore.fetchList()
+    olStore.fetchList();
     @Component({
         components: {Buttons, Icon}
     })
     export default class Labels extends Vue {
-        tags = olStore.tagList
-        createTag(){
-            const name = window.prompt('输入标签名')
-            if(name){
-                const massage = olStore.createTag(name)
-                if(massage === 'duplicated'){
-                    window.alert('标签名重复了')
-                }else if(massage === 'success'){
-                    window.alert('创建成功')
-                }
+        tags = olStore.tagList;
+
+        createTag() {
+            const name = window.prompt('输入标签名');
+            if (name) {
+                olStore.createTag(name);
             }
         }
     }
@@ -65,7 +61,8 @@
         border-radius: 4px;
         padding: 14px;
         font-size: 18px;
-        &-wrapper{
+
+        &-wrapper {
             text-align: center;
             padding: 16px;
             margin-top: 44-14px;

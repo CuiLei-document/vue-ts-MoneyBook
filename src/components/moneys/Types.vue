@@ -20,10 +20,6 @@
             }
             this.$emit('update:value',type)
         }
-        @Watch('type')
-        onTypeChange(value:string){
-            this.$emit('update:value',value)
-        }
     }
 </script>
 
