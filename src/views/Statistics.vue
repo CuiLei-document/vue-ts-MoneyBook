@@ -4,7 +4,7 @@
         <div>
             <ul>
                 <li v-for="(group,index) in recordGroup" :key="index">
-                    <h3 class="title">{{group.title}}</h3>
+                    <h3 class="title">{{meihua(group.title)}}</h3>
                     <ul>
                         <li class="tags" v-for="tags in group.items" :key="tags.id">
                             <span>
@@ -28,6 +28,8 @@
     import Vue from 'vue';
     import {Component} from 'vue-property-decorator';
     import Tabs from '@/components/Tabs.vue';
+    import dayjs from 'dayjs';
+    import clone from '@/lib/clone';
 
     @Component({
         components: {Tabs}
@@ -38,10 +40,27 @@
             {text: '支出', value: '-'},
             {text: '收入', value: '+'}
         ];
-        tagString(tags:Tag[]){
-           return  tags.length === 0? '无' : tags.map(t =>t.name).join('，')
+
+        tagString(tags: Tag[]) {
+            return tags.length === 0 ? '无' : tags.map(t => t.name).join('，');
         }
-        mounted() {
+
+        meihua(string: string) {
+            const day = dayjs(string);
+            if (day.isSame(dayjs(), 'day')) {
+                return '今天';
+            } else if (day.isSame(dayjs().subtract(1, 'day'), 'day')) {
+                return '昨天';
+            } else if (day.isSame(dayjs().subtract(2, 'day'), 'day')) {
+                return '前天';
+            } else if (day.isSame(dayjs(), 'month')) {
+                return day.format('M月-DD日');
+            } else {
+                day.format('YYYY年-MM月-DD日');
+            }
+        }
+
+        beforeCreate() {
             this.$store.commit('fetchRecord');
         }
 
@@ -51,13 +70,20 @@
 
         get recordGroup() {
             const {recordList} = this;
-            const hashTable: { [key: string]: { title: string, items: RecordItem[] } } = {};
-            for (let i = 0; i < recordList.length; i++) {
-                const [date, time] = recordList[i].createAl!.split('T');
-                hashTable[date] = hashTable[date] || {title: date, items: []};
-                hashTable[date].items.push(recordList[i]);
+            const hashTable: { title: string, items: RecordItem }[] = [];
+            const newList = clone(recordList).sort((a, b) => dayjs(b.createAl).valueOf() - dayjs(a.createAl).valueOf());
+            const group = [{title:dayjs(newList[0].createAl).format('YYYY-MM-DD'),items:[newList[0]]}]
+            for(let i=1; i<newList.length;i++){
+                const current = newList[i]
+                const last = group[group.length-1]
+                if(dayjs(last.title).isSame(dayjs(current.createAl),'day')){
+                    last.items.push(current)
+                }else{
+                    group.push({title:dayjs(current.createAl).format('YYYY-MM-DD'),items:[current]})
+                }
             }
-            return hashTable;
+            console.log(group);
+            return group;
         }
     }
 </script>
@@ -81,7 +107,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        min-height:40px;
+        min-height: 40px;
     }
 
     .title {
@@ -92,10 +118,11 @@
         @extend %item;
         background: white;
     }
-    .notes{
+
+    .notes {
         margin-right: auto;
         margin-left: 10px;
         font-size: 12px;
-        color:#999;
+        color: #999;
     }
 </style>

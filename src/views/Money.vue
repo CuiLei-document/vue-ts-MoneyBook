@@ -26,7 +26,7 @@
         };
         recordList = this.$store.commit('fetchRecord')
 
-        onUpdateTags(value: string[]) {
+        onUpdateTags(value: Tag[]) {
             this.record.tags = value;
         }
 
