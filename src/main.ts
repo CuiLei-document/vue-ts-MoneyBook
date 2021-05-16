@@ -13,6 +13,9 @@ window.onload = function(){
     window.scrollTo(0,50)
   },1000)
 }
+if(document.documentElement.clientWidth>500){
+  window.alert('用手机访问更方便')
+}
 new Vue({
   router,
   store,
